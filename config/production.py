@@ -1,4 +1,6 @@
+from default import DefaultConfig
 
-class ProductionConfig:
-    def __init__(self):
-        pass
+
+class ProductionConfig(DefaultConfig):
+    MONGODB_HOST = '192.168.1.218'
+    MONGODB_DB = 'ipet_starter'
