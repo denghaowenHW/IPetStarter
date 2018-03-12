@@ -3,7 +3,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 
 
-def create_user(account, password, phone_num, result):
+def create_user(args, result):
+    phone_num = args[0]
+    account = args[1]
+    password = args[2]
     # password: add salt and hash
     password = generate_password_hash(password)
     # check account and phone_num unique
@@ -13,7 +16,9 @@ def create_user(account, password, phone_num, result):
     result['status'] = 'success'
 
 
-def check_password(phone_num, input_pwd, result):
+def check_password(args, result):
+    phone_num = args[0]
+    input_pwd = args[1]
     user = User.objects(phone_num=phone_num).first()
     if user:
         password = user.password

@@ -13,8 +13,8 @@ class TestUtils(unittest.TestCase):
         print 'test api: /register'
         url = 'http://127.0.0.1:8088/register'
         param = {
-            'phone_num': '15828296486',
-            'account': 'denghaowen',
+            'phone_num': '15828296487',
+            'account': 'dengh',
             'password': 'deng@1995'
         }
         try:
@@ -87,10 +87,40 @@ class TestUtils(unittest.TestCase):
         except Exception as e:
             print 'Exception: %s' % str(e)
 
+    def test_api_add_article(self):
+        print 'test api: /api/v1/article/add'
+        url = 'http://127.0.0.1:8088/api/v1/article/add'
+        param = {
+            'title': 'xxx',
+            'author': 'denghaowen',
+            'content': 'i love u'
+        }
+        try:
+            response = requests.post(url=url, data=json.dumps(param), headers=self.headers)
+            data = response.json()
+            print data
+            self.assertTrue(data['status'] == 'success')
+        except Exception as e:
+            print 'Exception: %s' % str(e)
+
+    def test_api_del_article(self):
+        print 'test api: /api/v1/article/del'
+        url = 'http://127.0.0.1:8088/api/v1/article/del'
+        param = {
+            'article_id': '5aa68b477c03ee25f4fd3b27'
+        }
+        try:
+            response = requests.post(url=url, data=json.dumps(param), headers=self.headers)
+            data = response.json()
+            print data
+            self.assertTrue(data['status'] == 'success')
+        except Exception as e:
+            print 'Exception: %s' % str(e)
+
 
 if __name__ == '__main__':
     suite = unittest.TestSuite()
     start = time.clock()
-    suite.addTest(TestUtils('test_api_del_pets'))
+    suite.addTest(TestUtils('test_api_del_article'))
     print 'cost %s seconds' % (time.clock() - start)
     unittest.TextTestRunner().run(suite)

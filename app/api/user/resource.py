@@ -1,7 +1,6 @@
 from flask_restplus import Namespace, Resource
 from app.controllers.user_controller import *
 from flask import request, jsonify
-from app.api import api
 from log import logger
 
 ns = Namespace('user')
@@ -28,13 +27,12 @@ class ChangeBalance(Resource):
             phone_num = data.get('phone_num')
             money = data.get('money')
             args = (phone_num, money)
-            change_balance(args, result=result)
-            return jsonify(result)
+            change_balance(args=args, result=result)
         except Exception as e:
             logger.error('change balance exception: %s' % str(e))
             result['status'] = 'fail'
             result['msg'] = str(e)
-            return result
+        return jsonify(result)
 
 
 @ns.route('/add_pet')
@@ -62,13 +60,12 @@ class AddPet(Resource):
             pet_age = data.get('pet_age')
             pet_type = data.get('pet_type')
             args = (phone_num, pet_name, pet_age, pet_type)
-            create_pet(args, result)
-            return result
+            create_pet(args=args, result=result)
         except Exception as e:
             logger.error('add pet exception: %s' % str(e))
             result['status'] = 'fail'
             result['msg'] = str(e)
-            return result
+        return jsonify(result)
 
 
 @ns.route('/del_pets')
@@ -92,10 +89,9 @@ class DelPets(Resource):
             phone_num = data.get('phone_num')
             pet_id_list = data.get('pet_id_list')
             args = (phone_num, pet_id_list)
-            remove_pets(args, result)
-            return result
+            remove_pets(args=args, result=result)
         except Exception as e:
             logger.error('del pets exception: %s' % str(e))
             result['status'] = 'fail'
             result['msg'] = str(e)
-            return result
+        return jsonify(result)
