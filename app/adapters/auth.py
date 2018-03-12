@@ -28,13 +28,13 @@ def register():
         phone_num = data.get('phone_num')
         account = data.get('account')
         password = data.get('password')
-        create_user(account=account, password=password, phone_num=phone_num, result=result)
-        return jsonify(result)
+        args = (phone_num, account, password)
+        create_user(args=args, result=result)
     except Exception as e:
         logger.error('register exception: %s' % str(e))
         result['status'] = 'fail'
         result['msg'] = str(e)
-        return jsonify(result)
+    return jsonify(result)
 
 
 @auth_bp.route('/login', methods=['GET'])
@@ -57,10 +57,10 @@ def login():
         data = request.json
         phone_num = data.get('phone_num')
         input_pwd = data.get('input_pwd')
-        check_password(phone_num=phone_num, input_pwd=input_pwd, result=result)
-        return jsonify(result)
+        args = (phone_num, input_pwd)
+        check_password(args=args, result=result)
     except Exception as e:
         logger.error('login exception: %s' % str(e))
         result['status'] = 'fail'
         result['msg'] = str(e)
-        return jsonify(result)
+    return jsonify(result)
