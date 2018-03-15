@@ -133,10 +133,55 @@ class TestUtils(unittest.TestCase):
         except Exception as e:
             print 'Exception: %s' % str(e)
 
+    def test_api_add_goods(self):
+        print 'test api: /api/v1/goods/add'
+        url = 'http://127.0.0.1:8088/api/v1/goods/add'
+        param = {
+            'name': 'dog food',
+            'price': '49.9'
+        }
+        try:
+            response = requests.post(url=url, data=json.dumps(param), headers=self.headers)
+            data = response.json()
+            print data
+            self.assertTrue(data['status'] == 'success')
+        except Exception as e:
+            print 'Exception: %s' % str(e)
+
+    def test_api_del_goods(self):
+        print 'test api: /api/v1/goods/del'
+        url = 'http://127.0.0.1:8088/api/v1/goods/del'
+        param = {
+            'goods_id': '5aaa78d57c03ee26704c7a4a'
+        }
+        try:
+            response = requests.post(url=url, data=json.dumps(param), headers=self.headers)
+            data = response.json()
+            print data
+            self.assertTrue(data['status'] == 'success')
+        except Exception as e:
+            print 'Exception: %s' % str(e)
+
+    def test_api_edit_goods(self):
+        print 'test api: /api/v1/goods/edit'
+        url = 'http://127.0.0.1:8088/api/v1/goods/edit'
+        param = {
+            'goods_id': '5aaa78c17c03ee26704c7a49',
+            'edit_type': 'price',
+            'edit_content': '99.9',
+        }
+        try:
+            response = requests.put(url=url, data=json.dumps(param), headers=self.headers)
+            data = response.json()
+            print data
+            self.assertTrue(data['status'] == 'success')
+        except Exception as e:
+            print 'Exception: %s' % str(e)
+
 
 if __name__ == '__main__':
     suite = unittest.TestSuite()
     start = time.clock()
-    suite.addTest(TestUtils('test_api_edit_article'))
+    suite.addTest(TestUtils('test_api_edit_goods'))
     print 'cost %s seconds' % (time.clock() - start)
     unittest.TextTestRunner().run(suite)
