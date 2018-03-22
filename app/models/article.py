@@ -2,7 +2,7 @@ from .base import db
 
 
 class Article(db.Document):
-    _id = db.ObjectIdField()
+    _id = db.ObjectIdField(primary_key=True)
     title = db.StringField()
     author = db.StringField()
     content = db.StringField()

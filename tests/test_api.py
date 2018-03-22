@@ -178,10 +178,60 @@ class TestUtils(unittest.TestCase):
         except Exception as e:
             print 'Exception: %s' % str(e)
 
+    def test_api_add_notice(self):
+        print 'test api: /api/v1/user/notice/add'
+        url = 'http://127.0.0.1:8088/api/v1/user/notice/add'
+        param = {
+            'phone_num': '15828296486',
+            'pet_id': '1fc44180207811e899ca086266229d1b',
+            'notice_content': 'eat',
+            'time': '21:00'
+        }
+        try:
+            response = requests.post(url=url, data=json.dumps(param), headers=self.headers)
+            data = response.json()
+            print data
+            self.assertTrue(data['status'] == 'success')
+        except Exception as e:
+            print 'Exception: %s' % str(e)
+
+    def test_api_del_notice(self):
+        print 'test api: /api/v1/user/notice/del'
+        url = 'http://127.0.0.1:8088/api/v1/user/notice/del'
+        param = {
+            'phone_num': '15828296486',
+            'pet_id': '1fc44180207811e899ca086266229d1b',
+            'time': '21:00'
+        }
+        try:
+            response = requests.post(url=url, data=json.dumps(param), headers=self.headers)
+            data = response.json()
+            print data
+            self.assertTrue(data['status'] == 'success')
+        except Exception as e:
+            print 'Exception: %s' % str(e)
+
+    def test_api_edit_notice(self):
+        print 'test api: /api/v1/user/notice/edit'
+        url = 'http://127.0.0.1:8088/api/v1/user/notice/edit'
+        param = {
+            'phone_num': '15828296486',
+            'pet_id': '1fc44180207811e899ca086266229d1b',
+            'notice_content': 'take a shower',
+            'time': '21:00'
+        }
+        try:
+            response = requests.post(url=url, data=json.dumps(param), headers=self.headers)
+            data = response.json()
+            print data
+            self.assertTrue(data['status'] == 'success')
+        except Exception as e:
+            print 'Exception: %s' % str(e)
+
 
 if __name__ == '__main__':
     suite = unittest.TestSuite()
     start = time.clock()
-    suite.addTest(TestUtils('test_api_edit_goods'))
+    suite.addTest(TestUtils('test_api_edit_notice'))
     print 'cost %s seconds' % (time.clock() - start)
     unittest.TextTestRunner().run(suite)
