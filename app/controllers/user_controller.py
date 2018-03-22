@@ -90,3 +90,43 @@ def remove_pets(args, result):
         result['msg'] = 'user phone_num not exist'
 
 
+def add_notice(args, result):
+    phone_num = args[0]
+    pet_id = args[1]
+    notice_content = args[2]
+    time = args[3]
+    user = User.objects(phone_num=phone_num).first()
+    if user:
+        for pet in user.pets_list:
+            if pet['pet_id'] == pet_id:
+                pet['notice'][time] = notice_content
+                break
+        else:
+            result['status'] = 'fail'
+            result['msg'] = 'pet not exist'
+        user.save()
+        result['status'] = 'success'
+    else:
+        result['status'] = 'fail'
+        result['msg'] = 'user phone num not exist'
+
+
+def del_notice(args, result):
+    phone_num = args[0]
+    pet_id = args[1]
+    time = args[2]
+    user = User.objects(phone_num=phone_num).first()
+    if user:
+        for pet in user.pets_list:
+            if pet['pet_id'] == pet_id:
+                pet['notice'].pop(time)
+                break
+        else:
+            result['status'] = 'fail'
+            result['msg'] = 'pet not exist'
+        user.save()
+        result['status'] = 'success'
+    else:
+        result['status'] = 'fail'
+        result['msg'] = 'user phone num not exist'
+
