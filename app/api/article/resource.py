@@ -6,6 +6,17 @@ from log import logger
 ns = Namespace('article')
 
 
+@ns.route('/all')
+class GetArticleInfo(Resource):
+    def get(self):
+        try:
+            article_info = get_all_article()
+            return jsonify(article_info)
+        except Exception as e:
+            result = {'status': 'fail', 'msg': str(e)}
+            return jsonify(result)
+
+
 @ns.route('/<string:action>')
 class OperateArticle(Resource):
     def post(self, action):

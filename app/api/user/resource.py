@@ -6,6 +6,19 @@ from log import logger
 ns = Namespace('user')
 
 
+@ns.route('/info/<string:type>')
+class GetUserInfo(Resource):
+    def get(self, type):
+        try:
+            data = request.json
+            phone_num = data.get('phone_num')
+            user_info = get_user_info(phone_num=phone_num, info_type=type)
+            return jsonify(user_info)
+        except Exception as e:
+            result = {'status': 'fail', 'msg': str(e)}
+            return jsonify(result)
+
+
 @ns.route('/change_balance')
 class ChangeBalance(Resource):
     def put(self):

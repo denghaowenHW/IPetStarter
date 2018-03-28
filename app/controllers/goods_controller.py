@@ -36,5 +36,16 @@ def edit_goods(args, result):
         result['msg'] = 'goods not exist'
 
 
+def get_all_goods():
+    goods_list = list()
+    all_goods = Goods.objects()
+    for goods in all_goods:
+        single_goods = dict()
+        single_goods['_id'] = str(goods['_id'])
+        single_goods['name'] = goods['name']
+        single_goods['price'] = goods['price']
+        goods_list.append(single_goods)
+    return goods_list
+
 
 

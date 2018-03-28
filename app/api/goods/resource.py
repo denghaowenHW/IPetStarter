@@ -6,6 +6,17 @@ from log import logger
 ns = Namespace('goods')
 
 
+@ns.route('/all')
+class GetGoodsInfo(Resource):
+    def get(self):
+        try:
+            goods_info = get_all_goods()
+            return jsonify(goods_info)
+        except Exception as e:
+            result = {'status': 'fail', 'msg': str(e)}
+            return jsonify(result)
+
+
 @ns.route('/<string:action>')
 class OperateGoods(Resource):
     def post(self, action):

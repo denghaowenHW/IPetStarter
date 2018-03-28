@@ -130,3 +130,17 @@ def del_notice(args, result):
         result['status'] = 'fail'
         result['msg'] = 'user phone num not exist'
 
+
+def get_user_info(phone_num, info_type):
+    user = User.objects(phone_num=phone_num).first()
+    if user:
+        if info_type == 'base':
+            tmp_user = dict()
+            tmp_user['account'] = user.account
+            tmp_user['balance'] = user.balance
+            return tmp_user
+        elif info_type == 'pets':
+            return user.pets_list
+    else:
+        raise Exception('user not exist')
+
