@@ -7,7 +7,7 @@ ns = Namespace('user')
 
 
 @ns.route('/info/<string:type>')
-class GetBaseInfo(Resource):
+class GetUserInfo(Resource):
     def get(self, type):
         try:
             data = request.json
