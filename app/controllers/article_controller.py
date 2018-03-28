@@ -34,6 +34,19 @@ def edit_article(args, result):
         result['msg'] = 'article not exist'
 
 
+def get_all_article():
+    article_list = list()
+    articles = Article.objects()
+    for article in articles:
+        single_article = dict()
+        single_article['_id'] = str(article['_id'])
+        single_article['title'] = article['title']
+        single_article['author'] = article['author']
+        single_article['content'] = article['content']
+        single_article['point_praise_user_list'] = article['point_praise_user_list']
+        single_article['comment_list'] = article['comment_list']
+        article_list.append(single_article)
+    return article_list
 
 
 
