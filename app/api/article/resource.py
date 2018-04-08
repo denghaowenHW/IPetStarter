@@ -96,3 +96,71 @@ class OperateArticle(Resource):
                 result['status'] = 'fail'
                 result['msg'] = str(e)
         return jsonify(result)
+
+
+@ns.route('/likes')
+class ArticleLikes(Resource):
+    def get(self):
+        try:
+            id = request.args.get('id')
+            likes_num = get_likes_num(id)
+            return likes_num
+        except Exception as e:
+            logger.error('get article likes exception: %s' % str(e))
+            result = {'status': 'fail', 'msg': str(e)}
+            return jsonify(result)
+
+    def put(self):
+        result = {'status': '', 'msg': ''}
+        try:
+            '''
+             :param
+             {
+                 'id': '5aa68b477c03ee25f4fd3b28',
+                 'phone_num': '15828296486'
+             }
+             :return:
+             {
+                 'status': 'success',
+                 'msg': ''
+             }
+             '''
+            data = request.json
+            id = data.get('id')
+            phone_num = data.get('phone_num')
+            args = (id, phone_num)
+            click_likes(args, result)
+        except Exception as e:
+            logger.error('change article likes exception: %s' % str(e))
+            result['status'] = 'fail'
+            result['msg'] = str(e)
+        return jsonify(result)
+
+
+@ns.route('/likes_status')
+class ArticleLikesStatus(Resource):
+    def get(self):
+        result = {'is_like': False}
+        '''
+         :param
+         {
+             'id': '5aa68b477c03ee25f4fd3b28',
+             'phone_num': '15828296486'
+         }
+         :return:
+         {
+             'is_like': True,
+         }
+         '''
+        try:
+            data = request.json
+            id = data.get('id')
+            phone_num = data.get('phone_num')
+            args = (id, phone_num)
+            get_likes_status(args, result)
+        except Exception as e:
+            logger.error('get article likes status exception: %s' % str(e))
+            result['status'] = 'fail'
+            result['msg'] = str(e)
+        return jsonify(result)
+

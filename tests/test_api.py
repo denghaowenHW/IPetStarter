@@ -278,10 +278,51 @@ class TestUtils(unittest.TestCase):
         except Exception as e:
             print 'Exception: %s' % str(e)
 
+    def test_api_get_article_likes_length(self):
+        print 'test GET api: /api/v1/article/likes'
+        url = 'http://127.0.0.1:8088/api/v1/article/likes?id=5aa68b477c03ee25f4fd3b28'
+        try:
+            response = requests.get(url=url, headers=self.headers)
+            data = response.json()
+            print data
+            self.assertTrue(type(data) == int)
+        except Exception as e:
+            print 'Exception: %s' % str(e)
+
+    def test_api_click_likes(self):
+        print 'test PUT api: /api/v1/article/likes'
+        url = 'http://127.0.0.1:8088/api/v1/article/likes'
+        param = {
+            'phone_num': '15828296487',
+            'id': '5aa68b477c03ee25f4fd3b28'
+        }
+        try:
+            response = requests.put(url=url, data=json.dumps(param), headers=self.headers)
+            data = response.json()
+            print data
+            self.assertTrue(data['status'] == 'success')
+        except Exception as e:
+            print 'Exception: %s' % str(e)
+
+    def test_api_get_article_likes_status(self):
+        print 'test GET api: /api/v1/article/likes_status'
+        url = 'http://127.0.0.1:8088/api/v1/article/likes_status'
+        param = {
+            'phone_num': '15828296486',
+            'id': '5aa68b477c03ee25f4fd3b28'
+        }
+        try:
+            response = requests.get(url=url, data=json.dumps(param), headers=self.headers)
+            data = response.json()
+            print data
+            self.assertTrue(type(data['is_like']) == bool)
+        except Exception as e:
+            print 'Exception: %s' % str(e)
+
 
 if __name__ == '__main__':
     suite = unittest.TestSuite()
     start = time.clock()
-    suite.addTest(TestUtils('test_api_get_user_pets_info'))
+    suite.addTest(TestUtils('test_api_get_article_likes_status'))
     print 'cost %s seconds' % (time.clock() - start)
     unittest.TextTestRunner().run(suite)

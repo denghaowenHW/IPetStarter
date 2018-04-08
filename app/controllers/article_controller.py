@@ -1,4 +1,5 @@
 from app.models.article import Article
+from app.models.user import User
 
 
 def add_article(args, result):
@@ -49,4 +50,45 @@ def get_all_article():
     return article_list
 
 
+def get_likes_num(id):
+    article = Article.objects(_id=id).first()
+    if article:
+        return len(article['point_praise_user_list'])
+    else:
+        raise Exception('article not exist')
+
+
+def click_likes(args, result):
+    id = args[0]
+    phone_num = args[1]
+    article = Article.objects(_id=id).first()
+    if article:
+        likes_list = article['point_praise_user_list']
+        user = User.objects(phone_num=phone_num).first()
+        if user:
+            if phone_num in likes_list:
+                likes_list.remove(phone_num)
+            else:
+                likes_list.append(phone_num)
+            article.save()
+            result['status'] = 'success'
+        else:
+            result['status'] = 'fail'
+            result['msg'] = 'user not exist'
+    else:
+        result['status'] = 'fail'
+        result['msg'] = 'article not exist'
+
+
+def get_likes_status(args, result):
+    id = args[0]
+    phone_num = args[1]
+    article = Article.objects(_id=id).first()
+    if article:
+        likes_list = article['point_praise_user_list']
+        if phone_num in likes_list:
+            result['is_like'] = True
+    else:
+        result['status'] = 'fail'
+        result['msg'] = 'article not exist'
 
