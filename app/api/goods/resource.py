@@ -17,6 +17,24 @@ class GetGoodsInfo(Resource):
             return jsonify(result)
 
 
+@ns.route('/search')
+class SearchGoods(Resource):
+    def get(self):
+        # http://127.0.0.1:8088/api/v1/goods/search?label=dog,food
+        try:
+            label = request.args.get('label')
+            if label:
+                required_label = label.split(',')
+                goods_list = search_goods_by_label(required_label)
+                return jsonify(goods_list)
+            else:
+                result = {'status': 'fail', 'msg': 'no label'}
+                return jsonify(result)
+        except Exception as e:
+            result = {'status': 'fail', 'msg': str(e)}
+            return jsonify(result)
+
+
 @ns.route('/<string:action>')
 class OperateGoods(Resource):
     def post(self, action):
@@ -26,7 +44,8 @@ class OperateGoods(Resource):
              :param
              {
                  'name': 'dog food',
-                 'price': '49.9'
+                 'price': '49.9',
+                 'label': ['dog', 'food']
              }
              :return:
              {
@@ -38,7 +57,8 @@ class OperateGoods(Resource):
                 data = request.json
                 name = data.get('name')
                 price = data.get('price')
-                args = (name, price)
+                label = data.get('label')
+                args = (name, price, label)
                 add_goods(args=args, result=result)
             except Exception as e:
                 logger.error('add goods exception: %s' % str(e))

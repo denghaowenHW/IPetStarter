@@ -4,7 +4,8 @@ from app.models.goods import Goods
 def add_goods(args, result):
     name = args[0]
     price = float(args[1])
-    goods = Goods(name=name, price=price)
+    label = args[2]
+    goods = Goods(name=name, price=price, label=label)
     goods.save()
     result['status'] = 'success'
 
@@ -44,8 +45,16 @@ def get_all_goods():
         single_goods['_id'] = str(goods['_id'])
         single_goods['name'] = goods['name']
         single_goods['price'] = goods['price']
+        single_goods['label'] = goods['label']
         goods_list.append(single_goods)
     return goods_list
 
 
-
+def search_goods_by_label(required_label):
+    tmp_list = list()
+    all_goods = Goods.objects()
+    for goods in all_goods:
+        # whether list has contains relationship
+        if set(required_label) <= set(goods.label):
+            tmp_list.append(goods)
+    return tmp_list
