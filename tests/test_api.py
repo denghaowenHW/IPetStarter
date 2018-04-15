@@ -93,7 +93,8 @@ class TestUtils(unittest.TestCase):
         param = {
             'title': 'xxx',
             'author': 'denghaowen',
-            'content': 'i love u'
+            'content': 'i love u',
+            'label': ['love', 'story']
         }
         try:
             response = requests.post(url=url, data=json.dumps(param), headers=self.headers)
@@ -107,7 +108,7 @@ class TestUtils(unittest.TestCase):
         print 'test api: /api/v1/article/del'
         url = 'http://127.0.0.1:8088/api/v1/article/del'
         param = {
-            'article_id': '5aa7d6827c03ee2150ff91f7'
+            'article_id': '5aa7d6867c03ee2150ff91fc'
         }
         try:
             response = requests.post(url=url, data=json.dumps(param), headers=self.headers)
@@ -121,9 +122,9 @@ class TestUtils(unittest.TestCase):
         print 'test api: /api/v1/article/edit'
         url = 'http://127.0.0.1:8088/api/v1/article/edit'
         param = {
-            'article_id': '5aa68b477c03ee25f4fd3b28',
-            'edit_type': 'author',
-            'edit_content': 'shidong'
+            'article_id': '5ad354af7c03ee2c84097fa9',
+            'edit_type': 'label',
+            'edit_content': ['love', 'story', 'i']
         }
         try:
             response = requests.put(url=url, data=json.dumps(param), headers=self.headers)
@@ -138,7 +139,8 @@ class TestUtils(unittest.TestCase):
         url = 'http://127.0.0.1:8088/api/v1/goods/add'
         param = {
             'name': 'dog food',
-            'price': '49.9'
+            'price': '49.9',
+            'label': ['dog', 'food']
         }
         try:
             response = requests.post(url=url, data=json.dumps(param), headers=self.headers)
@@ -152,7 +154,7 @@ class TestUtils(unittest.TestCase):
         print 'test api: /api/v1/goods/del'
         url = 'http://127.0.0.1:8088/api/v1/goods/del'
         param = {
-            'goods_id': '5aaa78d57c03ee26704c7a4a'
+            'goods_id': '5ad341147c03ee1f9c596911'
         }
         try:
             response = requests.post(url=url, data=json.dumps(param), headers=self.headers)
@@ -166,9 +168,9 @@ class TestUtils(unittest.TestCase):
         print 'test api: /api/v1/goods/edit'
         url = 'http://127.0.0.1:8088/api/v1/goods/edit'
         param = {
-            'goods_id': '5aaa78c17c03ee26704c7a49',
-            'edit_type': 'price',
-            'edit_content': '99.9',
+            'goods_id': '5ad3425e7c03ee1f9c596912',
+            'edit_type': 'label',
+            'edit_content': ['dog', 'food'],
         }
         try:
             response = requests.put(url=url, data=json.dumps(param), headers=self.headers)
@@ -319,10 +321,74 @@ class TestUtils(unittest.TestCase):
         except Exception as e:
             print 'Exception: %s' % str(e)
 
+    def test_api_add_comment(self):
+        print 'test POST api: /api/v1/article/comment'
+        url = 'http://127.0.0.1:8088/api/v1/article/comment'
+        param = {
+            'phone_num': '15828296487',
+            'comment': 'i love u',
+            'id': '5aa68b477c03ee25f4fd3b28'
+        }
+        try:
+            response = requests.post(url=url, data=json.dumps(param), headers=self.headers)
+            data = response.json()
+            print data
+            self.assertTrue(data['status'] == 'success')
+        except Exception as e:
+            print 'Exception: %s' % str(e)
+
+    def test_api_get_comments(self):
+        print 'test GET api: /api/v1/article/comment'
+        url = 'http://127.0.0.1:8088/api/v1/article/comment?id=5aa68b477c03ee25f4fd3b28'
+        try:
+            response = requests.get(url=url, headers=self.headers)
+            data = response.json()
+            print data
+            self.assertTrue(type(data) == list)
+        except Exception as e:
+            print 'Exception: %s' % str(e)
+
+    def test_api_del_comments(self):
+        print 'test api: /api/v1/article/del_comment'
+        url = 'http://127.0.0.1:8088/api/v1/article/del_comment'
+        param = {
+            'comment_id': '7efce35e3bfc11e88443dc85def89886',
+            'article_id': '5aa68b477c03ee25f4fd3b28'
+        }
+        try:
+            response = requests.put(url=url, data=json.dumps(param), headers=self.headers)
+            data = response.json()
+            print data
+            self.assertTrue(data['status'] == 'success')
+        except Exception as e:
+            print 'Exception: %s' % str(e)
+
+    def test_api_search_goods_by_label(self):
+        print 'test api: /api/v1/goods/search'
+        url = 'http://127.0.0.1:8088/api/v1/goods/search?label=dog'
+        try:
+            response = requests.get(url=url, headers=self.headers)
+            data = response.json()
+            print data
+            self.assertTrue(len(data) > 0)
+        except Exception as e:
+            print 'Exception: %s' % str(e)
+
+    def test_api_search_article_by_label(self):
+        print 'test api: /api/v1/article/search'
+        url = 'http://127.0.0.1:8088/api/v1/article/search?label=love,i'
+        try:
+            response = requests.get(url=url, headers=self.headers)
+            data = response.json()
+            print data
+            self.assertTrue(len(data) > 0)
+        except Exception as e:
+            print 'Exception: %s' % str(e)
+
 
 if __name__ == '__main__':
     suite = unittest.TestSuite()
     start = time.clock()
-    suite.addTest(TestUtils('test_api_get_article_likes_status'))
+    suite.addTest(TestUtils('test_api_search_article_by_label'))
     print 'cost %s seconds' % (time.clock() - start)
     unittest.TextTestRunner().run(suite)

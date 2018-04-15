@@ -2,7 +2,7 @@ from .base import db
 
 
 class User(db.Document):
-    _id = db.ObjectIdField(primary_key=True)
+    _id = db.ObjectIdField()
     account = db.StringField(required=True, unique=True)
     password = db.StringField(required=True)
     balance = db.FloatField(default=0, required=True)
