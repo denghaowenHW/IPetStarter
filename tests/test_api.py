@@ -370,18 +370,18 @@ class TestUtils(unittest.TestCase):
             response = requests.get(url=url, headers=self.headers)
             data = response.json()
             print data
-            self.assertTrue(len(data) > 0)
+            self.assertTrue(type(data) == list)
         except Exception as e:
             print 'Exception: %s' % str(e)
 
     def test_api_search_article_by_label(self):
         print 'test api: /api/v1/article/search'
-        url = 'http://127.0.0.1:8088/api/v1/article/search?label=love,i'
+        url = 'http://127.0.0.1:8088/api/v1/article/search?label=love'
         try:
             response = requests.get(url=url, headers=self.headers)
             data = response.json()
             print data
-            self.assertTrue(len(data) > 0)
+            self.assertTrue(type(data) == list)
         except Exception as e:
             print 'Exception: %s' % str(e)
 
@@ -389,6 +389,6 @@ class TestUtils(unittest.TestCase):
 if __name__ == '__main__':
     suite = unittest.TestSuite()
     start = time.clock()
-    suite.addTest(TestUtils('test_api_search_article_by_label'))
+    suite.addTest(TestUtils('test_api_search_goods_by_label'))
     print 'cost %s seconds' % (time.clock() - start)
     unittest.TextTestRunner().run(suite)

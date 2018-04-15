@@ -18,7 +18,7 @@ class GetArticleInfo(Resource):
 
 
 @ns.route('/search')
-class SearchGoods(Resource):
+class SearchArticles(Resource):
     def get(self):
         # http://127.0.0.1:8088/api/v1/article/search?label=love,story
         try:
