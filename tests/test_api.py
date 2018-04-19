@@ -232,29 +232,23 @@ class TestUtils(unittest.TestCase):
 
     def test_api_get_user_base_info(self):
         print 'test api: /api/v1/user/info/base'
-        url = 'http://127.0.0.1:8088/api/v1/user/info/base'
-        param = {
-            'phone_num': '15828296486'
-        }
+        url = 'http://127.0.0.1:8088/api/v1/user/info/base?phone=15828296486'
         try:
-            response = requests.get(url=url, data=json.dumps(param), headers=self.headers)
+            response = requests.get(url=url, headers=self.headers)
             data = response.json()
             print data
-            self.assertTrue(not data['status'] == 'fail')
+            self.assertTrue(not data.get('status') == 'fail')
         except Exception as e:
             print 'Exception: %s' % str(e)
 
     def test_api_get_user_pets_info(self):
         print 'test api: /api/v1/user/info/pets'
-        url = 'http://127.0.0.1:8088/api/v1/user/info/pets'
-        param = {
-            'phone_num': '15828296486'
-        }
+        url = 'http://127.0.0.1:8088/api/v1/user/info/pets?phone=15828296486'
         try:
-            response = requests.get(url=url, data=json.dumps(param), headers=self.headers)
+            response = requests.get(url=url, headers=self.headers)
             data = response.json()
             print data
-            self.assertTrue(not data['status'] == 'fail')
+            self.assertTrue(type(data) == list)
         except Exception as e:
             print 'Exception: %s' % str(e)
 
@@ -389,6 +383,6 @@ class TestUtils(unittest.TestCase):
 if __name__ == '__main__':
     suite = unittest.TestSuite()
     start = time.clock()
-    suite.addTest(TestUtils('test_api_search_goods_by_label'))
+    suite.addTest(TestUtils('test_api_get_user_pets_info'))
     print 'cost %s seconds' % (time.clock() - start)
     unittest.TextTestRunner().run(suite)

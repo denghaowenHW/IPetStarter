@@ -2,6 +2,7 @@ from flask_restplus import Namespace, Resource
 from app.controllers.article_controller import *
 from flask import request, jsonify
 from log import logger
+from app.api import api
 
 ns = Namespace('article')
 
@@ -17,6 +18,7 @@ class GetArticleInfo(Resource):
             return jsonify(result)
 
 
+@api.doc(params={'label': 'eg: love,story'})
 @ns.route('/search')
 class SearchArticles(Resource):
     def get(self):

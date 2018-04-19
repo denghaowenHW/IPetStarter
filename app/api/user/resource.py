@@ -2,16 +2,17 @@ from flask_restplus import Namespace, Resource
 from app.controllers.user_controller import *
 from flask import request, jsonify
 from log import logger
+from app.api import api
 
 ns = Namespace('user')
 
 
+@api.doc(params={'type': 'base or pets', 'phone': 'phone number'})
 @ns.route('/info/<string:type>')
 class GetUserInfo(Resource):
     def get(self, type):
         try:
-            data = request.json
-            phone_num = data.get('phone_num')
+            phone_num = request.args.get('phone')
             user_info = get_user_info(phone_num=phone_num, info_type=type)
             return jsonify(user_info)
         except Exception as e:
