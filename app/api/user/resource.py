@@ -168,3 +168,63 @@ class Notice(Resource):
                 result['status'] = 'fail'
                 result['msg'] = str(e)
         return jsonify(result)
+
+
+@ns.route('/cart')
+class Cart(Resource):
+    def put(self):
+        result = {'status': '', 'msg': ''}
+        '''
+         :param
+         {
+             'goods_id': '5ad3425e7c03ee1f9c596912',
+             'phone_num': '13540719442',
+             'goods_num': '4'
+         }
+         :return:
+         {
+             'status': 'success',
+             'msg': ''
+         }
+         '''
+        try:
+            data = request.json
+            goods_id = data.get('goods_id')
+            phone_num = data.get('phone_num')
+            goods_num = data.get('goods_num')
+            args = (goods_id, phone_num, goods_num)
+            put_cart(args, result)
+        except Exception as e:
+            logger.error('put cart exception: %s' % str(e))
+            result['status'] = 'fail'
+            result['msg'] = str(e)
+        return jsonify(result)
+
+
+@ns.route('/del_cart')
+class DelCart(Resource):
+    def post(self):
+        result = {'status': '', 'msg': ''}
+        '''
+         :param
+         {
+             'goods_id': ['5ad3425e7c03ee1f9c596912'],
+             'phone_num': '13540719442',
+         }
+         :return:
+         {
+             'status': 'success',
+             'msg': ''
+         }
+         '''
+        try:
+            data = request.json
+            goods_id = data.get('goods_id')
+            phone_num = data.get('phone_num')
+            args = (goods_id, phone_num)
+            del_cart(args, result)
+        except Exception as e:
+            logger.error('del cart exception: %s' % str(e))
+            result['status'] = 'fail'
+            result['msg'] = str(e)
+        return jsonify(result)
