@@ -13,9 +13,9 @@ class TestUtils(unittest.TestCase):
         print 'test api: /register'
         url = 'http://127.0.0.1:8088/register'
         param = {
-            'phone_num': '15828296487',
-            'account': 'dengh',
-            'password': 'deng@1995'
+            'phone_num': '13540719442',
+            'account': 'zz',
+            'password': 'zz123'
         }
         try:
             response = requests.post(url=url, data=json.dumps(param), headers=self.headers)
@@ -232,29 +232,23 @@ class TestUtils(unittest.TestCase):
 
     def test_api_get_user_base_info(self):
         print 'test api: /api/v1/user/info/base'
-        url = 'http://127.0.0.1:8088/api/v1/user/info/base'
-        param = {
-            'phone_num': '15828296486'
-        }
+        url = 'http://127.0.0.1:8088/api/v1/user/info/base?phone=15828296486'
         try:
-            response = requests.get(url=url, data=json.dumps(param), headers=self.headers)
+            response = requests.get(url=url, headers=self.headers)
             data = response.json()
             print data
-            self.assertTrue(not data['status'] == 'fail')
+            self.assertTrue(not data.get('status') == 'fail')
         except Exception as e:
             print 'Exception: %s' % str(e)
 
     def test_api_get_user_pets_info(self):
         print 'test api: /api/v1/user/info/pets'
-        url = 'http://127.0.0.1:8088/api/v1/user/info/pets'
-        param = {
-            'phone_num': '15828296486'
-        }
+        url = 'http://127.0.0.1:8088/api/v1/user/info/pets?phone=15828296486'
         try:
-            response = requests.get(url=url, data=json.dumps(param), headers=self.headers)
+            response = requests.get(url=url, headers=self.headers)
             data = response.json()
             print data
-            self.assertTrue(not data['status'] == 'fail')
+            self.assertTrue(type(data) == list)
         except Exception as e:
             print 'Exception: %s' % str(e)
 
@@ -385,10 +379,41 @@ class TestUtils(unittest.TestCase):
         except Exception as e:
             print 'Exception: %s' % str(e)
 
+    def test_api_put_cart(self):
+        print 'test api: /api/v1/user/cart'
+        url = 'http://127.0.0.1:8088/api/v1/user/cart'
+        params = {
+             'goods_id': '5ad342657c03ee1f9c596913',
+             'phone_num': '13540719442',
+             'goods_num': '1'
+         }
+        try:
+            response = requests.put(url=url, data=json.dumps(params), headers=self.headers)
+            data = response.json()
+            print data
+            self.assertTrue(data['status'] == 'success')
+        except Exception as e:
+            print 'Exception: %s' % str(e)
+
+    def test_api_del_cart(self):
+        print 'test api: /api/v1/user/del_cart'
+        url = 'http://127.0.0.1:8088/api/v1/user/del_cart'
+        params = {
+             'goods_id': ['5ad342657c03ee1f9c596913', '5ad3425e7c03ee1f9c596912'],
+             'phone_num': '13540719442'
+         }
+        try:
+            response = requests.post(url=url, data=json.dumps(params), headers=self.headers)
+            data = response.json()
+            print data
+            self.assertTrue(data['status'] == 'success')
+        except Exception as e:
+            print 'Exception: %s' % str(e)
+
 
 if __name__ == '__main__':
     suite = unittest.TestSuite()
     start = time.clock()
-    suite.addTest(TestUtils('test_api_search_goods_by_label'))
+    suite.addTest(TestUtils('test_api_put_cart'))
     print 'cost %s seconds' % (time.clock() - start)
     unittest.TextTestRunner().run(suite)

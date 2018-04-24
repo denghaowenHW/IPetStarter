@@ -1,4 +1,5 @@
 from app.models.user import User
+from app.models.goods import Goods
 from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 
@@ -141,6 +142,49 @@ def get_user_info(phone_num, info_type):
             return tmp_user
         elif info_type == 'pets':
             return user.pets_list
+        elif info_type == 'cart':
+            return user.cart
     else:
         raise Exception('user not exist')
 
+
+def del_cart(args, result):
+    goods_id = args[0]
+    phone_num = args[1]
+    user = User.objects(phone_num=phone_num).first()
+    if user:
+        for one in user.cart:
+            print one['goods_id']
+            if one['goods_id'] in goods_id:
+                user.cart.remove(one)
+        user.save()
+        result['status'] = 'success'
+    else:
+        result['status'] = 'fail'
+        result['msg'] = 'user not exist'
+
+
+def put_cart(args, result):
+    goods_id = args[0]
+    phone_num = args[1]
+    goods_num = args[2]
+    user = User.objects(phone_num=phone_num).first()
+    goods = Goods.objects(_id=goods_id).first()
+    if user and goods:
+        for cart in user.cart:
+            if cart['goods_id'] == goods_id:
+                cart['good_num'] = goods_num
+                cart['goods_price'] = float(goods.price) * int(goods_num)
+                break
+        else:
+            goods_info = dict()
+            goods_info['goods_id'] = goods_id
+            goods_info['goods_name'] = goods.name
+            goods_info['goods_price'] = float(goods.price) * int(goods_num)
+            goods_info['good_num'] = goods_num
+            user.cart.append(goods_info)
+        user.save()
+        result['status'] = 'success'
+    else:
+        result['status'] = 'fail'
+        result['msg'] = 'user or goods not exist'

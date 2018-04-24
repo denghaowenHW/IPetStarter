@@ -2,6 +2,7 @@ from flask_restplus import Namespace, Resource
 from app.controllers.goods_controller import *
 from flask import request, jsonify
 from log import logger
+from app.api import api
 
 ns = Namespace('goods')
 
@@ -17,6 +18,7 @@ class GetGoodsInfo(Resource):
             return jsonify(result)
 
 
+@api.doc(params={'label': 'eg: dog,food'})
 @ns.route('/search')
 class SearchGoods(Resource):
     def get(self):
