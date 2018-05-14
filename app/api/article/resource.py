@@ -9,6 +9,7 @@ ns = Namespace('article')
 
 @ns.route('/all')
 class GetArticleInfo(Resource):
+    @api.doc(description='to get all article info')
     def get(self):
         try:
             article_info = get_all_article()
@@ -21,6 +22,7 @@ class GetArticleInfo(Resource):
 @api.doc(params={'label': 'eg: love,story'})
 @ns.route('/search')
 class SearchArticles(Resource):
+    @api.doc(description='to search article by keyword label')
     def get(self):
         # http://127.0.0.1:8088/api/v1/article/search?label=love,story
         try:
@@ -39,6 +41,7 @@ class SearchArticles(Resource):
 
 @ns.route('/<string:action>')
 class OperateArticle(Resource):
+    @api.doc(description='to add or edit or delete article')
     def post(self, action):
         result = {'status': '', 'msg': ''}
         if action == 'add':
@@ -90,6 +93,7 @@ class OperateArticle(Resource):
                 result['msg'] = str(e)
         return jsonify(result)
 
+    @api.doc(description='to edit article')
     def put(self, action):
         result = {'status': '', 'msg': ''}
         if action == 'edit':
@@ -122,6 +126,7 @@ class OperateArticle(Resource):
 
 @ns.route('/likes')
 class ArticleLikes(Resource):
+    @api.doc(description='to get the number of likes')
     def get(self):
         try:
             id = request.args.get('id')
@@ -132,6 +137,7 @@ class ArticleLikes(Resource):
             result = {'status': 'fail', 'msg': str(e)}
             return jsonify(result)
 
+    @api.doc(description='to point praise or cancel likes')
     def put(self):
         result = {'status': '', 'msg': ''}
         try:
@@ -161,6 +167,7 @@ class ArticleLikes(Resource):
 
 @ns.route('/likes_status')
 class ArticleLikesStatus(Resource):
+    @api.doc(description='to get likes status')
     def get(self):
         result = {'is_like': False}
         '''
@@ -189,6 +196,7 @@ class ArticleLikesStatus(Resource):
 
 @ns.route('/comment')
 class ArticleComment(Resource):
+    @api.doc(description='to get all comments')
     def get(self):
         try:
             id = request.args.get('id')
@@ -199,6 +207,7 @@ class ArticleComment(Resource):
             result = {'status': 'fail', 'msg': str(e)}
             return jsonify(result)
 
+    @api.doc(description='to add comment')
     def post(self):
         result = {'status': '', 'msg': ''}
         '''
@@ -230,6 +239,7 @@ class ArticleComment(Resource):
 
 @ns.route('/del_comment')
 class ArticleCommentDelete(Resource):
+    @api.doc(description='to delete comment')
     def put(self):
         result = {'status': '', 'msg': ''}
         '''

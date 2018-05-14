@@ -7,9 +7,10 @@ from app.api import api
 ns = Namespace('user')
 
 
-@api.doc(params={'type': 'base or pets', 'phone': 'phone number'})
+@api.doc(params={'type': 'base or pets or cart', 'phone': 'phone number'})
 @ns.route('/info/<string:type>')
 class GetUserInfo(Resource):
+    @api.doc(description='to get current user info')
     def get(self, type):
         try:
             phone_num = request.args.get('phone')
@@ -22,6 +23,7 @@ class GetUserInfo(Resource):
 
 @ns.route('/change_balance')
 class ChangeBalance(Resource):
+    @api.doc(description='to add or reduce user\'s balance')
     def put(self):
         result = {'status': '', 'msg': ''}
         '''
@@ -51,6 +53,7 @@ class ChangeBalance(Resource):
 
 @ns.route('/add_pet')
 class AddPet(Resource):
+    @api.doc(description='to add a pet')
     def post(self):
         result = {'status': '', 'msg': ''}
         '''
@@ -84,6 +87,7 @@ class AddPet(Resource):
 
 @ns.route('/del_pets')
 class DelPets(Resource):
+    @api.doc(description='to delete a pet')
     def post(self):
         result = {'status': '', 'msg': ''}
         '''
@@ -113,6 +117,7 @@ class DelPets(Resource):
 
 @ns.route('/notice/<string:action>')
 class Notice(Resource):
+    @api.doc(description='to add or edit or delete one pet\'s notice')
     def post(self, action):
         result = {'status': '', 'msg': ''}
         if action == 'add' or action == 'edit':
@@ -172,6 +177,7 @@ class Notice(Resource):
 
 @ns.route('/cart')
 class Cart(Resource):
+    @api.doc(description='to add or edit user\'s cart')
     def put(self):
         result = {'status': '', 'msg': ''}
         '''
@@ -203,6 +209,7 @@ class Cart(Resource):
 
 @ns.route('/del_cart')
 class DelCart(Resource):
+    @api.doc(description='to delete user\'s cart')
     def post(self):
         result = {'status': '', 'msg': ''}
         '''

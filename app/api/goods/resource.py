@@ -9,6 +9,7 @@ ns = Namespace('goods')
 
 @ns.route('/all')
 class GetGoodsInfo(Resource):
+    @api.doc(description='to get all goods')
     def get(self):
         try:
             goods_info = get_all_goods()
@@ -21,6 +22,7 @@ class GetGoodsInfo(Resource):
 @api.doc(params={'label': 'eg: dog,food'})
 @ns.route('/search')
 class SearchGoods(Resource):
+    @api.doc(description='to search goods by keyword label')
     def get(self):
         # http://127.0.0.1:8088/api/v1/goods/search?label=dog,food
         try:
@@ -39,6 +41,7 @@ class SearchGoods(Resource):
 
 @ns.route('/<string:action>')
 class OperateGoods(Resource):
+    @api.doc(description='to add or delete or edit goods')
     def post(self, action):
         result = {'status': '', 'msg': ''}
         if action == 'add':
@@ -88,6 +91,7 @@ class OperateGoods(Resource):
                 result['msg'] = str(e)
         return jsonify(result)
 
+    @api.doc(description='to edit goods')
     def put(self, action):
         result = {'status': '', 'msg': ''}
         if action == 'edit':
